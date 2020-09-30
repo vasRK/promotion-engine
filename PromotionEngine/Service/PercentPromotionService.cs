@@ -9,8 +9,8 @@ namespace PromotionEngine.Service
 		public override double CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
 		{
 			//price is calculated for a batch on N
-			var productCount = (int)discountedProduct.Count / promotionProduct.ProductCount;
-			return productCount * promotionProduct.ProductCount * (1 - promotionProduct.PriceMultiplier) * promotionProduct.Product.Price;
+			var productBatchCount = (int)discountedProduct.Count / promotionProduct.ProductCount;
+			return productBatchCount * promotionProduct.ProductCount * (1 - promotionProduct.PriceMultiplier) * promotionProduct.Product.Price;
 		}
 	}
 }
