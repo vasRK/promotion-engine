@@ -17,7 +17,7 @@
 
 		public double GetPrice()
 		{
-			return this.Promotion.GetDiscountedPrice(this.Product, this.Count);
+			return this.Promotion.GetDiscountedPrice(this);
 		}
 	}
 }
