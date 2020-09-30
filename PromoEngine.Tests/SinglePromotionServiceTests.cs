@@ -10,10 +10,12 @@ namespace PromoEngine.Tests
 	public class SinglePromotionServiceTests
 	{
 		[TestMethod]
-		public void WhenPromotionApplied_Should_Crate_DiscountedProducts()
+		public void ProductA_WhenPromotionApplied_Should_Crate_DiscountedProducts()
 		{
 			//Setup
-			var cart = PopulateCartForSKUA();
+			var cart = new Cart();
+			PopulateCartForSKUA(cart);
+
 			var promotions = GetPromotionForSKUA();
 			var singlePromoService = (IPromotionService)new SinglePromotionService();
 			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
@@ -28,22 +30,49 @@ namespace PromoEngine.Tests
 		}
 
 		[TestMethod]
-		public void WhenPromotionAppliedAndGetDiscountedPriceCalled_Should_GetdiscountedPrice()
+		public void ProductA_WhenPromotionAppliedAndGetDiscountedPriceCalled_Should_GetCorrectDiscountedPrice()
 		{
 			//Setup
-			var cart = PopulateCartForSKUA();
+			var cart = new Cart();
+			PopulateCartForSKUA(cart);
+
 			var promotions = GetPromotionForSKUA();
 			var singlePromoService = (IPromotionService)new SinglePromotionService();
 			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
+			var cartProductA = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUA).FirstOrDefault();
+
+			//all products discounted
+			cartProductA.Count = 6;
 
 			//Act
 			singlePromoService.ApplyPromotion(singlePromo, cart.CartProducts);
-			var cartProductA = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUA).FirstOrDefault();
-			var discountedProduct = cartProductA.DiscountedProducts.First();
-			var discountedPrice = singlePromoService.CalculateDiscountedPrice(singlePromo.PromotionProducts.First(), discountedProduct);
+			var discountedPrice = singlePromoService.CalculateDiscountedPrice(singlePromo.PromotionProducts.First()
+				, cartProductA.DiscountedProducts.First());
 
 			//Assert
-			Assert.IsTrue(discountedPrice == 130.0);
+			Assert.IsTrue(discountedPrice == 260.0);
+		}
+
+		[TestMethod]
+		public void ProductB_WhenPromotionAppliedAndGetDiscountedPriceCalled_Should_GetCorrectDiscountedPrice()
+		{
+			//Setup
+			var cart = new Cart();
+			PopulateCartForSKUB(cart);
+
+			var promotions = GetPromotionForSKUB();
+			var singlePromoService = (IPromotionService)new SinglePromotionService();
+			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
+			var cartProductB = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUB).FirstOrDefault();
+
+			//Act
+			singlePromoService.ApplyPromotion(singlePromo, cart.CartProducts);
+			var discountedPrice = singlePromoService.CalculateDiscountedPrice(singlePromo.PromotionProducts.First()
+				, cartProductB.DiscountedProducts.First());
+
+			//Assert
+			//Only six products out of total 7, two costing 45
+			Assert.IsTrue(discountedPrice == 135.0);
 		}
 
 		#region Product A helpers
@@ -67,10 +96,9 @@ namespace PromoEngine.Tests
 		/// To test Product A
 		/// </summary>
 		/// <returns></returns>
-		Cart PopulateCartForSKUA()
+		Cart PopulateCartForSKUA(Cart cart)
 		{
 			//Populate Carte
-			var cart = new Cart();
 			var products = GetProducts();
 			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
 			var cartProduct = new CartProduct() { Count = 5, Product = productA };
@@ -89,6 +117,36 @@ namespace PromoEngine.Tests
 			products.Add(new Product() { Id = 4, SKU = Constants.SKUD, Price = 15 });
 
 			return products;
+		}
+
+		#endregion
+
+		#region Product B helpers
+
+		Cart PopulateCartForSKUB(Cart cart)
+		{
+			//Populate Carte
+			var products = GetProducts();
+			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
+			var cartProduct = new CartProduct() { Count = 7, Product = productB };
+
+			cart.AddCartProduct(cartProduct);
+			return cart;
+		}
+
+		List<Promotion> GetPromotionForSKUB()
+		{
+			var products = GetProducts();
+			var promotions = new List<Promotion>();
+
+			//Promotion for B
+			var promotionB = new Promotion() { Type = PromotionType.Single };
+			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
+			var promoProductB = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
+			promotionB.PromotionProducts.Add(promoProductB);
+			promotions.Add(promotionB);
+
+			return promotions;
 		}
 
 		#endregion

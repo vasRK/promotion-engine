@@ -12,8 +12,16 @@ namespace PromotionEngine
 		private static List<Product> _products;
 		static void Main(string[] args)
 		{
-			var cart = PopulateCartForSKUA();
+			var cart = new Cart();
+
+			PopulateCartForSKUA(cart, 5);
+			PopulateCartForSKUB(cart, 5);
+			//PopulateCartForSKUC(cart, 1);
+			//PopulateCartForSKUD(cart, 1);
+
 			var promotions = GetPromotionForSKUA();
+			promotions.AddRange(GetPromotionForSKUB());
+			//promotions.AddRange(GetPromotionForSKUCD());
 
 			foreach (var promotion in promotions)
 			{
@@ -82,11 +90,7 @@ namespace PromotionEngine
 			promotions.AddRange(GetPromotionForSKUA());
 
 			//Promotion for B
-			var promotionB = new Promotion() { Type = PromotionType.Single };
-			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
-			var promoBProduct = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
-			promotionB.PromotionProducts.Add(promoBProduct);
-			promotions.Add(promotionB);
+			promotions.AddRange(GetPromotionForSKUB());
 
 			//Promotion for C & D
 			var promotionCD = new Promotion() { Type = PromotionType.Combo };
@@ -101,8 +105,10 @@ namespace PromotionEngine
 			return promotions;
 		}
 
-
 		#region Product A helpers
+
+
+
 
 		static List<Promotion> GetPromotionForSKUA()
 		{
@@ -123,19 +129,95 @@ namespace PromotionEngine
 		/// To test Product A
 		/// </summary>
 		/// <returns></returns>
-		static Cart PopulateCartForSKUA()
+		static Cart PopulateCartForSKUA(Cart cart, int count)
 		{
 			//Populate Carte
-			var cart = new Cart();
 			var products = GetProducts();
 			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
-			var cartProduct = new CartProduct() { Count = 5, Product = productA };
+			var cartProduct = new CartProduct() { Count = count, Product = productA };
 
 			cart.AddCartProduct(cartProduct);
-
 			return cart;
 		}
 
 		#endregion
+
+		#region Product B helpers
+
+		static Cart PopulateCartForSKUB(Cart cart, int count)
+		{
+			//Populate Carte
+			var products = GetProducts();
+			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
+			var cartProduct = new CartProduct() { Count = count, Product = productB };
+
+			cart.AddCartProduct(cartProduct);
+			return cart;
+		}
+
+		static List<Promotion> GetPromotionForSKUB()
+		{
+			var products = GetProducts();
+			var promotions = new List<Promotion>();
+
+			//Promotion for A
+			var promotionB = new Promotion() { Type = PromotionType.Single };
+			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
+			var promoProductB = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
+			promotionB.PromotionProducts.Add(promoProductB);
+			promotions.Add(promotionB);
+
+			return promotions;
+		}
+
+		#endregion
+
+		#region Product C 
+
+		static Cart PopulateCartForSKUC(Cart cart, int count)
+		{
+			//Populate Carte
+			var products = GetProducts();
+			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
+			var cartProduct = new CartProduct() { Count = count, Product = productC };
+
+			cart.AddCartProduct(cartProduct);
+			return cart;
+		}
+
+		#endregion
+
+		#region Product D 
+
+		static Cart PopulateCartForSKUD(Cart cart, int count)
+		{
+			//Populate Carte
+			var products = GetProducts();
+			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
+			var cartProduct = new CartProduct() { Count = count, Product = productD };
+
+			cart.AddCartProduct(cartProduct);
+			return cart;
+		}
+
+		#endregion
+		static List<Promotion> GetPromotionForSKUCD()
+		{
+			var products = GetProducts();
+			var promotions = new List<Promotion>();
+
+			//Promotion for C & D
+			var promotionCD = new Promotion() { Type = PromotionType.Combo };
+			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
+			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
+			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PriceMultiplier = 0 };
+			var promoDProduct = new PromotionProduct() { Product = productD, ProductCount = 1, PriceMultiplier = 30 };
+			promotionCD.PromotionProducts.Add(promoCProduct);
+			promotionCD.PromotionProducts.Add(promoDProduct);
+			promotions.Add(promotionCD);
+
+
+			return promotions;
+		}
 	}
 }
