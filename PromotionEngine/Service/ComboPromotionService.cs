@@ -86,7 +86,6 @@ namespace PromotionEngine.Service
 					}
 				}
 			}
-
 		}
 
 		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)

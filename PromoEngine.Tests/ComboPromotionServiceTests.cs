@@ -165,7 +165,7 @@ namespace PromoEngine.Tests
 			var promotions = new List<Promotion>();
 
 			//Promotion for C & D
-			var promotionCD = new Promotion() { Type = PromotionType.Combo };
+			var promotionCD = new Promotion() { Type = PromotionType.Combo, Id = 1003 };
 			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
 			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
 			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PriceMultiplier = 0 };

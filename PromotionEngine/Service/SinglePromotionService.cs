@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace PromotionEngine.Service
 {
-	public sealed class SinglePromotionService : IPromotionService
+	public class SinglePromotionService : IPromotionService
 	{
-		void IPromotionService.ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
+		public void ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
 		{
 			//Single promo so apply to a single product
 			var promoProduct = promotion.PromotionProducts.FirstOrDefault();
@@ -22,22 +22,24 @@ namespace PromotionEngine.Service
 					if (nonDiscountedCount > 0)
 					{
 						var numOfbatchs = (int)nonDiscountedCount / promoProduct.ProductCount;
-						var disountedProduct = new DiscountedProduct()
+						if (numOfbatchs > 0)
 						{
-							Count = numOfbatchs * promoProduct.ProductCount,
-							Product = cartProduct.Product,
-							Promotion = promotion
-						};
+							var disountedProduct = new DiscountedProduct()
+							{
+								Count = numOfbatchs * promoProduct.ProductCount,
+								Product = cartProduct.Product,
+								Promotion = promotion
+							};
 
-						cartProduct.setPromoApplied(true);
-						cartProduct.DiscountedProducts.Add(disountedProduct);
+							cartProduct.setPromoApplied(true);
+							cartProduct.DiscountedProducts.Add(disountedProduct);
+						}
 					}
 				}
 			}
 		}
 
-
-		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
+		public virtual double CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
 		{
 			//price is calculated for a batch on N
 			var productCount = (int)discountedProduct.Count / promotionProduct.ProductCount;

@@ -83,7 +83,7 @@ namespace PromoEngine.Tests
 			var promotions = new List<Promotion>();
 
 			//Promotion for A
-			var promotionA = new Promotion() { Type = PromotionType.Single };
+			var promotionA = new Promotion() { Type = PromotionType.Single, Id = 1001 };
 			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
 			var promoAProduct = new PromotionProduct() { Product = productA, ProductCount = 3, PriceMultiplier = 130 };
 			promotionA.PromotionProducts.Add(promoAProduct);
@@ -140,7 +140,7 @@ namespace PromoEngine.Tests
 			var promotions = new List<Promotion>();
 
 			//Promotion for B
-			var promotionB = new Promotion() { Type = PromotionType.Single };
+			var promotionB = new Promotion() { Type = PromotionType.Single, Id = 1002 };
 			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
 			var promoProductB = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
 			promotionB.PromotionProducts.Add(promoProductB);

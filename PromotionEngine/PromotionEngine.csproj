@@ -51,6 +51,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Promotion.cs" />
     <Compile Include="Models\PromotionProduct.cs" />
+    <Compile Include="Service\PercentPromotionService.cs" />
     <Compile Include="Service\IPromotionService.cs" />
     <Compile Include="Service\ComboPromotionService.cs" />
     <Compile Include="Service\SinglePromotionService.cs" />
