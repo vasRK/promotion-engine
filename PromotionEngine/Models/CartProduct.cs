@@ -76,8 +76,7 @@ namespace PromotionEngine.Models
 			var cartPrice = this._cartPrice;
 			var savedAmount = price - cartPrice;
 			var productInfo = string.Format("{0} x {1}", this.Product.SKU, this.Count);
-			var billStmt = string.Format("Actual Price: ${0}, Final Price ${1} {2}", price, cartPrice, (savedAmount > 0 ?
-				string.Format("You saved ${0}", savedAmount) : ""));
+			var billStmt = string.Format("Actual Price: ${0}, Final Price ${1}", price, cartPrice);
 
 			return string.Format("{0} \n -> {1}", productInfo, billStmt);
 		}

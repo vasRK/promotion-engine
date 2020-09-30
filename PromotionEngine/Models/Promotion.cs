@@ -7,6 +7,8 @@ namespace PromotionEngine.Models
 {
 	public class Promotion
 	{
+		public int Id { get; set; }
+
 		public List<PromotionProduct> PromotionProducts { get; set; }
 
 		public PromotionType Type { get; set; }
