@@ -9,10 +9,10 @@ namespace PromotionEngine.Service
 		void IPromotionService.ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
 		{
 			//Single promo so apply to a single product
-			var promoProduct = promotion.PromotionProducts.First();
+			var promoProduct = promotion.PromotionProducts.FirstOrDefault();
 			if (promoProduct != default(PromotionProduct))
 			{
-				var cartProduct = cartProducts.Where(cp => cp.Product.SKU == promoProduct.Product.SKU && !cp.IsPromoApplied()).First();
+				var cartProduct = cartProducts.Where(cp => cp.Product.SKU == promoProduct.Product.SKU && !cp.IsPromoApplied()).FirstOrDefault();
 				if (cartProduct != default(CartProduct))
 				{
 					var discountedProductCount = cartProduct.DiscountedProducts.Select(dp => dp.Count).Sum();

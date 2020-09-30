@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PromotionEngine.Models;
+using System.Linq;
 
 namespace PromotionEngine.Service
 {
@@ -7,12 +8,45 @@ namespace PromotionEngine.Service
 	{
 		void IPromotionService.ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
 		{
-			throw new System.NotImplementedException();
+			var promoSKUIds = promotion.PromotionProducts.Select(pp => pp.Product.SKU).ToList();
+			var cartProductList = cartProducts.Where(cp => !cp.IsPromoApplied() && promoSKUIds.Contains(cp.Product.SKU)).ToList();
+			var cartProdSKUIds = cartProductList.Select(cp => cp.Product.SKU).ToList();
+			var minCount = promotion.PromotionProducts.Select(promoProd => promoProd.ProductCount).Min();
+
+			//Check all promo product are in cart products 
+			var areEqual = promoSKUIds.ToHashSet().SetEquals(cartProdSKUIds.ToHashSet());
+			if (areEqual)
+			{
+				foreach (var skuId in promoSKUIds)
+				{
+					var cartProduct = cartProducts.Where(cp => cp.Product.SKU == skuId).FirstOrDefault();
+					var promoProduct = promotion.PromotionProducts.Where(promoProd => promoProd.Product.SKU == skuId).FirstOrDefault();
+					var discountedProductCount = cartProduct.DiscountedProducts.Select(dp => dp.Count).Sum();
+					var nonDiscountedCount = cartProduct.Count - discountedProductCount;
+
+					//if not all products have a discount applied
+					if (nonDiscountedCount > 0)
+					{
+						var numOfbatchs = (int)nonDiscountedCount / promoProduct.ProductCount;
+						var disountedProduct = new DiscountedProduct()
+						{
+							Count = numOfbatchs * promoProduct.ProductCount,
+							Product = cartProduct.Product,
+							Promotion = promotion
+						};
+
+						cartProduct.setPromoApplied(true);
+						cartProduct.DiscountedProducts.Add(disountedProduct);
+					}
+				}
+			}
 		}
 
 		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
 		{
-			throw new System.NotImplementedException();
+			//price is calculated for a batch on N
+			var productCount = (int)discountedProduct.Count / promotionProduct.ProductCount;
+			return productCount * promotionProduct.PriceMultiplier;
 		}
 	}
 }

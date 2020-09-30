@@ -12,57 +12,11 @@ namespace PromotionEngine
 		private static List<Product> _products;
 		static void Main(string[] args)
 		{
-			var cart = new Cart();
-
-			PopulateCartForSKUA(cart, 5);
-			PopulateCartForSKUB(cart, 5);
-			//PopulateCartForSKUC(cart, 1);
-			//PopulateCartForSKUD(cart, 1);
-
-			var promotions = GetPromotionForSKUA();
-			promotions.AddRange(GetPromotionForSKUB());
-			//promotions.AddRange(GetPromotionForSKUCD());
-
-			foreach (var promotion in promotions)
-			{
-				promotion.ApplyPromotion(cart.CartProducts);
-			}
-
-			cart.GenerateCartStatement();
+			RunUseCase1();
+			RunUseCase2();
+			RunUseCase3();
 
 			Console.ReadLine();
-		}
-
-		static Cart PopulateCart()
-		{
-			//Populate Carte
-			var cart = new Cart();
-			//Randomly select how many diff products should be ordered.
-			int totalProducts = new Random(4).Next();
-			var productCountGen = new Random(10);
-			var products = GetProducts();
-
-			for (var ctr = 1; ctr <= totalProducts; ctr++)
-			{
-				//Randomly select how many of a product should be ordered.
-				var countToOrder = productCountGen.Next();
-				if (countToOrder > 0)
-				{
-					var product = products.Where(prod => prod.Id == ctr).FirstOrDefault();
-					if (product != default(Product))
-					{
-						var cartProd = new CartProduct()
-						{
-							Product = product,
-							Count = countToOrder
-						};
-
-						cart.AddCartProduct(cartProd);
-					}
-				}
-			}
-
-			return cart;
 		}
 
 		static List<Product> GetProducts()
@@ -93,22 +47,12 @@ namespace PromotionEngine
 			promotions.AddRange(GetPromotionForSKUB());
 
 			//Promotion for C & D
-			var promotionCD = new Promotion() { Type = PromotionType.Combo };
-			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
-			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
-			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PriceMultiplier = 0 };
-			var promoDProduct = new PromotionProduct() { Product = productD, ProductCount = 1, PriceMultiplier = 30 };
-			promotionCD.PromotionProducts.Add(promoCProduct);
-			promotionCD.PromotionProducts.Add(promoDProduct);
-			promotions.Add(promotionCD);
+			promotions.AddRange(GetPromotionForSKUCD());
 
 			return promotions;
 		}
 
 		#region Product A helpers
-
-
-
 
 		static List<Promotion> GetPromotionForSKUA()
 		{
@@ -216,8 +160,71 @@ namespace PromotionEngine
 			promotionCD.PromotionProducts.Add(promoDProduct);
 			promotions.Add(promotionCD);
 
-
 			return promotions;
 		}
+
+		#region UseCase 1
+		static void RunUseCase1()
+		{
+			var cart = new Cart();
+			PopulateCartForSKUA(cart, 1);
+			PopulateCartForSKUB(cart, 1);
+			PopulateCartForSKUC(cart, 1);
+
+			var promotions = GetAllPromotions();
+
+			foreach (var promotion in promotions)
+			{
+				promotion.ApplyPromotion(cart.CartProducts);
+			}
+
+			cart.GenerateCartStatement();
+			Console.WriteLine("End Case 1");
+			Console.WriteLine();
+		}
+		#endregion
+
+		#region UseCase 2
+		static void RunUseCase2()
+		{
+			var cart = new Cart();
+			PopulateCartForSKUA(cart, 5);
+			PopulateCartForSKUB(cart, 5);
+			PopulateCartForSKUC(cart, 1);
+
+			var promotions = GetAllPromotions();
+
+			foreach (var promotion in promotions)
+			{
+				promotion.ApplyPromotion(cart.CartProducts);
+			}
+
+			cart.GenerateCartStatement();
+			Console.WriteLine("End Case 2");
+			Console.WriteLine();
+		}
+		#endregion
+
+		#region UseCase 3
+		static void RunUseCase3()
+		{
+			var cart = new Cart();
+			PopulateCartForSKUA(cart, 3);
+			PopulateCartForSKUB(cart, 5);
+			PopulateCartForSKUC(cart, 1);
+			PopulateCartForSKUD(cart, 1);
+
+			var promotions = GetAllPromotions();
+
+			foreach (var promotion in promotions)
+			{
+				promotion.ApplyPromotion(cart.CartProducts);
+			}
+
+			cart.GenerateCartStatement();
+			Console.WriteLine("End Case 3");
+			Console.WriteLine();
+		}
+		#endregion
 	}
 }
