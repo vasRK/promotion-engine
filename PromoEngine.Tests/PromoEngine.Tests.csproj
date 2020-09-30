@@ -49,9 +49,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PercentPromotionServiceTests.cs" />
-    <Compile Include="ComboPromotionServiceTests.cs" />
-    <Compile Include="SinglePromotionServiceTests.cs" />
+    <Compile Include="Services\PercentPromotionServiceTests.cs" />
+    <Compile Include="Services\ComboPromotionServiceTests.cs" />
+    <Compile Include="Services\SinglePromotionServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

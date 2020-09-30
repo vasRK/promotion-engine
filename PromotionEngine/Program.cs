@@ -234,6 +234,7 @@ namespace PromotionEngine
 		static void TestPercentPromotion()
 		{
 			//X% on Product D when N item brought;
+			//Apply 10% discount when ProductD is ordered 10 or more
 			var cart = new Cart();
 			var products = GetProducts();
 			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
