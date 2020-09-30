@@ -39,7 +39,7 @@ namespace PromoEngine.Tests
 			//Setup
 			var cart = new Cart();
 			PopulateCartForSKUC(cart, 2);
-			PopulateCartForSKUD(cart, 3);
+			PopulateCartForSKUD(cart, 2);
 
 			var promotions = GetPromotionForSKUCD();
 			var promoService = (IPromotionService)new ComboPromotionService();
@@ -84,6 +84,42 @@ namespace PromoEngine.Tests
 			//Assert
 			Assert.IsTrue(cartProductC.DiscountedProducts.Count == 0);
 		}
+
+		[TestMethod]
+		public void WhenPromotionProductWithVaringSize_Should_ApplyPromotionToMinimumPossibleBatches()
+		{
+			//Setup
+			var cart = new Cart();
+			PopulateCartForSKUC(cart, 7);
+			PopulateCartForSKUD(cart, 20);
+
+			var promotions = GetPromotionForSKUCD();
+			var promo = promotions.First();
+			var promoProdD = promo.PromotionProducts.Where(pp => pp.Product.SKU == Constants.SKUD).First();
+			promoProdD.ProductCount = 4;
+
+			var promoService = (IPromotionService)new ComboPromotionService();
+			var comboPromo = promotions.Where(pro => pro.Type == PromotionType.Combo).FirstOrDefault();
+
+			//Act
+			promoService.ApplyPromotion(comboPromo, cart.CartProducts);
+
+			//Discounted Price for C.
+			var cartProductC = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUC).FirstOrDefault();
+			var promoProductC = comboPromo.PromotionProducts.Where(pp => pp.Product.SKU == Constants.SKUC).FirstOrDefault();
+			var discountedPriceC = promoService.CalculateDiscountedPrice(promoProductC, cartProductC.DiscountedProducts.First());
+
+			//Discounted Price for D.
+			var cartProductD = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUD).FirstOrDefault();
+			var promoProductD = comboPromo.PromotionProducts.Where(pp => pp.Product.SKU == Constants.SKUD).FirstOrDefault();
+			var discountedPriceD = promoService.CalculateDiscountedPrice(promoProductD, cartProductD.DiscountedProducts.First());
+
+			//Assert
+			Assert.IsTrue(cartProductC.DiscountedProducts.Sum(dp => dp.Count) == 5);
+			Assert.IsTrue(discountedPriceC == 0.0);
+			Assert.IsTrue(discountedPriceD == 150.0);
+		}
+
 
 		List<Product> GetProducts()
 		{

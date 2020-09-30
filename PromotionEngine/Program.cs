@@ -226,5 +226,9 @@ namespace PromotionEngine
 			Console.WriteLine();
 		}
 		#endregion
+
+		#region Percentage Promotion
+
+		#endregion
 	}
 }
