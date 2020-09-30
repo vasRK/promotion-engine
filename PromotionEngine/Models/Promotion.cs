@@ -34,7 +34,7 @@ namespace PromotionEngine.Models
 			}
 
 			var promoService = GetService();
-			return promoService.GetDiscountedPrice(promoProduct, discountedProduct);
+			return promoService.CalculateDiscountedPrice(promoProduct, discountedProduct);
 		}
 
 		/// <summary>

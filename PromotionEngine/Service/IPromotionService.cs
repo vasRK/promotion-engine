@@ -18,6 +18,6 @@ namespace PromotionEngine.Service
 		/// <param name="promotionProduct"></param>
 		/// <param name="discountedProduct"></param>
 		/// <returns></returns>
-		double GetDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct);
+		double CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct);
 	}
 }

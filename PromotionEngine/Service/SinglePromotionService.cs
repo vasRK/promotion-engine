@@ -37,7 +37,7 @@ namespace PromotionEngine.Service
 		}
 
 
-		double IPromotionService.GetDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
+		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
 		{
 			//price is calculated for a batch on N
 			var productCount = (int)discountedProduct.Count / promotionProduct.ProductCount;

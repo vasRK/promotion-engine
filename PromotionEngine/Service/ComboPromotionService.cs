@@ -10,7 +10,7 @@ namespace PromotionEngine.Service
 			throw new System.NotImplementedException();
 		}
 
-		double IPromotionService.GetDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
+		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
 		{
 			throw new System.NotImplementedException();
 		}
