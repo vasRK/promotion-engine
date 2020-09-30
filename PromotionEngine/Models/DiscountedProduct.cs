@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace PromotionEngine.Models
+﻿namespace PromotionEngine.Models
 {
 	/// <summary>
 	/// Represents a product after a certain promotion applied.
