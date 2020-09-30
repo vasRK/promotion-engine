@@ -11,7 +11,7 @@ namespace PromotionEngine.Service
 			var promoSKUIds = promotion.PromotionProducts.Select(pp => pp.Product.SKU).ToList();
 			var cartProductList = cartProducts.Where(cp => !cp.IsPromoApplied() && promoSKUIds.Contains(cp.Product.SKU)).ToList();
 			var cartProdSKUIds = cartProductList.Select(cp => cp.Product.SKU).ToList();
-			var minCount = promotion.PromotionProducts.Select(promoProd => promoProd.ProductCount).Min();
+			var minCount = cartProducts.Select(promoProd => promoProd.Count).Min();
 
 			//Check all promo product are in cart products 
 			var areEqual = promoSKUIds.ToHashSet().SetEquals(cartProdSKUIds.ToHashSet());
@@ -27,10 +27,10 @@ namespace PromotionEngine.Service
 					//if not all products have a discount applied
 					if (nonDiscountedCount > 0)
 					{
-						var numOfbatchs = (int)nonDiscountedCount / promoProduct.ProductCount;
+						var numOfbatchs = (int)nonDiscountedCount / minCount;
 						var disountedProduct = new DiscountedProduct()
 						{
-							Count = numOfbatchs * promoProduct.ProductCount,
+							Count = numOfbatchs * minCount,
 							Product = cartProduct.Product,
 							Promotion = promotion
 						};
