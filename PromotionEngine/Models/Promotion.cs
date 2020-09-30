@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using PromotionEngine.Models.Service;
+using PromotionEngine.Service;
 
 namespace PromotionEngine.Models
 {
