@@ -9,16 +9,20 @@ namespace PromotionEngine
 {
 	class Program
 	{
+		private static List<Product> _products;
 		static void Main(string[] args)
 		{
-			var cart = PopulateCart();
-			var promotions = GetPromotions();
+			var cart = PopulateCartForSKUA();
+			var promotions = GetPromotionForSKUA();
 
 			foreach (var promotion in promotions)
 			{
 				promotion.ApplyPromotion(cart.CartProducts);
 			}
 
+			cart.GenerateCartStatement();
+
+			Console.ReadLine();
 		}
 
 		static Cart PopulateCart()
@@ -55,45 +59,83 @@ namespace PromotionEngine
 
 		static List<Product> GetProducts()
 		{
-			var products = new List<Product>();
-			products.Add(new Product() { Id = 1, SKU = "A", Price = 50 });
-			products.Add(new Product() { Id = 2, SKU = "B", Price = 30 });
-			products.Add(new Product() { Id = 3, SKU = "C", Price = 20 });
-			products.Add(new Product() { Id = 4, SKU = "D", Price = 15 });
+			if (Program._products == null)
+			{
+				var products = new List<Product>();
+				products.Add(new Product() { Id = 1, SKU = Constants.SKUA, Price = 50 });
+				products.Add(new Product() { Id = 2, SKU = Constants.SKUB, Price = 30 });
+				products.Add(new Product() { Id = 3, SKU = Constants.SKUC, Price = 20 });
+				products.Add(new Product() { Id = 4, SKU = Constants.SKUD, Price = 15 });
 
-			return products;
+				Program._products = products;
+			}
+
+			return Program._products;
 		}
 
-		static List<Promotion> GetPromotions()
+		static List<Promotion> GetAllPromotions()
 		{
 			var products = GetProducts();
 			var promotions = new List<Promotion>();
 
 			//Promotion for A
-			var promotionA = new Promotion() { Type = PromotionType.Single };
-			var productA = products.Where(prod => prod.SKU == "A").FirstOrDefault();
-			var promoAProduct = new PromotionProduct() { Product = productA, ProductCount = 3 };
-			promotionA.PromotionProducts.Add(promoAProduct);
-			promotions.Add(promotionA);
+			promotions.AddRange(GetPromotionForSKUA());
 
 			//Promotion for B
 			var promotionB = new Promotion() { Type = PromotionType.Single };
-			var productB = products.Where(prod => prod.SKU == "B").FirstOrDefault();
-			var promoBProduct = new PromotionProduct() { Product = productB, ProductCount = 2 };
+			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
+			var promoBProduct = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
 			promotionB.PromotionProducts.Add(promoBProduct);
 			promotions.Add(promotionB);
 
 			//Promotion for C & D
 			var promotionCD = new Promotion() { Type = PromotionType.Combo };
-			var productC = products.Where(prod => prod.SKU == "C").FirstOrDefault();
-			var productD = products.Where(prod => prod.SKU == "D").FirstOrDefault();
-			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PromotionPrice = 0 };
-			var promoDProduct = new PromotionProduct() { Product = productD, ProductCount = 1, PromotionPrice = 30 };
+			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
+			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
+			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PriceMultiplier = 0 };
+			var promoDProduct = new PromotionProduct() { Product = productD, ProductCount = 1, PriceMultiplier = 30 };
 			promotionCD.PromotionProducts.Add(promoCProduct);
 			promotionCD.PromotionProducts.Add(promoDProduct);
 			promotions.Add(promotionCD);
 
 			return promotions;
 		}
+
+
+		#region Product A helpers
+
+		static List<Promotion> GetPromotionForSKUA()
+		{
+			var products = GetProducts();
+			var promotions = new List<Promotion>();
+
+			//Promotion for A
+			var promotionA = new Promotion() { Type = PromotionType.Single };
+			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
+			var promoAProduct = new PromotionProduct() { Product = productA, ProductCount = 3, PriceMultiplier = 130 };
+			promotionA.PromotionProducts.Add(promoAProduct);
+			promotions.Add(promotionA);
+
+			return promotions;
+		}
+
+		/// <summary>
+		/// To test Product A
+		/// </summary>
+		/// <returns></returns>
+		static Cart PopulateCartForSKUA()
+		{
+			//Populate Carte
+			var cart = new Cart();
+			var products = GetProducts();
+			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
+			var cartProduct = new CartProduct() { Count = 5, Product = productA };
+
+			cart.AddCartProduct(cartProduct);
+
+			return cart;
+		}
+
+		#endregion
 	}
 }

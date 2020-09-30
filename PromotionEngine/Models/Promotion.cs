@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PromotionEngine.Service;
 
@@ -21,17 +22,20 @@ namespace PromotionEngine.Models
 		public void ApplyPromotion(List<CartProduct> cartProducts)
 		{
 			var promoService = GetService();
-			promoService.ApplyPromotion(cartProducts);
+			promoService.ApplyPromotion(this, cartProducts);
 		}
 
-		public double GetDiscountedPrice(Product product, int count)
+		public double GetDiscountedPrice(DiscountedProduct discountedProduct)
 		{
-			var promoProduct = this.PromotionProducts.Where(prod => prod.Product.SKU == product.SKU).FirstOrDefault();
-			var productCount = (int)count / promoProduct.ProductCount;
+			var promoProduct = this.PromotionProducts.Where(prod => prod.Product.SKU == discountedProduct.Product.SKU).FirstOrDefault();
+			if (promoProduct == default(PromotionProduct))
+			{
+				throw new ArgumentException("No Promotion found for given product", "product");
+			}
 
-			return productCount * promoProduct.PromotionPrice;
+			var promoService = GetService();
+			return promoService.CalculateDiscountedPrice(promoProduct, discountedProduct);
 		}
-
 
 		/// <summary>
 		/// For now service is created each time, there are other better ways 
