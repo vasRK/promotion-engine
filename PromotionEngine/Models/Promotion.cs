@@ -13,9 +13,6 @@ namespace PromotionEngine.Models
 
 		public PromotionType Type { get; set; }
 
-		//Is this needed here
-		public double PromotionPrice { get; set; }
-
 		public Promotion()
 		{
 			PromotionProducts = new List<PromotionProduct>();
@@ -55,8 +52,9 @@ namespace PromotionEngine.Models
 				case PromotionType.Combo:
 					service = new ComboPromotionService();
 					break;
-					//case PromotionType.Percent:
-					//	break;
+				case PromotionType.Percent:
+					service = new PercentPromotionService();
+					break;
 			}
 
 			return service;

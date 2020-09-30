@@ -16,6 +16,8 @@ namespace PromotionEngine
 			RunUseCase2();
 			RunUseCase3();
 
+			TestPercentPromotion();
+
 			Console.ReadLine();
 		}
 
@@ -60,7 +62,7 @@ namespace PromotionEngine
 			var promotions = new List<Promotion>();
 
 			//Promotion for A
-			var promotionA = new Promotion() { Type = PromotionType.Single };
+			var promotionA = new Promotion() { Type = PromotionType.Single, Id = 1001 };
 			var productA = products.Where(prod => prod.SKU == Constants.SKUA).FirstOrDefault();
 			var promoAProduct = new PromotionProduct() { Product = productA, ProductCount = 3, PriceMultiplier = 130 };
 			promotionA.PromotionProducts.Add(promoAProduct);
@@ -105,7 +107,7 @@ namespace PromotionEngine
 			var promotions = new List<Promotion>();
 
 			//Promotion for A
-			var promotionB = new Promotion() { Type = PromotionType.Single };
+			var promotionB = new Promotion() { Type = PromotionType.Single, Id = 1002 };
 			var productB = products.Where(prod => prod.SKU == Constants.SKUB).FirstOrDefault();
 			var promoProductB = new PromotionProduct() { Product = productB, ProductCount = 2, PriceMultiplier = 45 };
 			promotionB.PromotionProducts.Add(promoProductB);
@@ -151,7 +153,7 @@ namespace PromotionEngine
 			var promotions = new List<Promotion>();
 
 			//Promotion for C & D
-			var promotionCD = new Promotion() { Type = PromotionType.Combo };
+			var promotionCD = new Promotion() { Type = PromotionType.Combo, Id = 1003 };
 			var productC = products.Where(prod => prod.SKU == Constants.SKUC).FirstOrDefault();
 			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
 			var promoCProduct = new PromotionProduct() { Product = productC, ProductCount = 1, PriceMultiplier = 0 };
@@ -229,6 +231,32 @@ namespace PromotionEngine
 
 		#region Percentage Promotion
 
+		static void TestPercentPromotion()
+		{
+			//X% on Product D when N item brought;
+			var cart = new Cart();
+			var products = GetProducts();
+			var productD = products.Where(prod => prod.SKU == Constants.SKUD).FirstOrDefault();
+
+			PopulateCartForSKUD(cart, 10);
+
+			var percentPromo = new Promotion() { Id = 1004, Type = PromotionType.Percent };
+			var promoProduct = new PromotionProduct()
+			{
+				Product = productD,
+				PriceMultiplier = .10,
+				ProductCount = 10
+			};
+
+			percentPromo.PromotionProducts.Add(promoProduct);
+
+			percentPromo.ApplyPromotion(cart.CartProducts);
+
+			cart.GenerateCartStatement();
+
+			Console.WriteLine("End Case PercentPromotion");
+			Console.WriteLine();
+		}
 		#endregion
 	}
 }
