@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace PromotionEngine.Service
 {
-	public sealed class ComboPromotionService : IPromotionService
+	public sealed class ComboPromotionService : PromotionService
 	{
-		void IPromotionService.ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
+		public override void ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
 		{
 			var promoSKUIds = promotion.PromotionProducts.Select(pp => pp.Product.SKU).ToList();
 			var cartProductList = cartProducts.Where(cp => !cp.IsPromoApplied() && promoSKUIds.Contains(cp.Product.SKU)).ToList();
@@ -86,13 +86,6 @@ namespace PromotionEngine.Service
 					}
 				}
 			}
-		}
-
-		double IPromotionService.CalculateDiscountedPrice(PromotionProduct promotionProduct, DiscountedProduct discountedProduct)
-		{
-			//price is calculated for a batch on N
-			var productCount = (int)discountedProduct.Count / promotionProduct.ProductCount;
-			return productCount * promotionProduct.PriceMultiplier;
 		}
 	}
 }

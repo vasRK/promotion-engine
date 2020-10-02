@@ -54,7 +54,7 @@
     <Compile Include="Service\PercentPromotionService.cs" />
     <Compile Include="Service\IPromotionService.cs" />
     <Compile Include="Service\ComboPromotionService.cs" />
-    <Compile Include="Service\SinglePromotionService.cs" />
+    <Compile Include="Service\SinglePromotionBaseService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

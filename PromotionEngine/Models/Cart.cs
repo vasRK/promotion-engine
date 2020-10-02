@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PromotionEngine.Models
 {
+
+	/// <summary>
+	/// Represents a checkout cart
+	/// </summary>
 	public class Cart
 	{
 		public List<CartProduct> CartProducts { get; set; }

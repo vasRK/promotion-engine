@@ -47,7 +47,7 @@ namespace PromotionEngine.Models
 			switch (this.Type)
 			{
 				case PromotionType.Single:
-					service = new SinglePromotionService();
+					service = new PromotionService();
 					break;
 				case PromotionType.Combo:
 					service = new ComboPromotionService();
