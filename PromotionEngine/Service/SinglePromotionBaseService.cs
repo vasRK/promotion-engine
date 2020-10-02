@@ -4,9 +4,12 @@ using System.Linq;
 
 namespace PromotionEngine.Service
 {
-	public class SinglePromotionService : IPromotionService
+	/// <summary>
+	/// Handles promotion for a single product, where promotion is applied set of N items can be brought at a Fixed price
+	/// </summary>
+	public class PromotionService : IPromotionService
 	{
-		public void ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
+		public virtual void ApplyPromotion(Promotion promotion, List<CartProduct> cartProducts)
 		{
 			//Single promo so apply to a single product
 			var promoProduct = promotion.PromotionProducts.FirstOrDefault();

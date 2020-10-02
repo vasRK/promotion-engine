@@ -3,6 +3,9 @@ using PromotionEngine.Models;
 
 namespace PromotionEngine.Service
 {
+	/// <summary>
+	/// Service to apply and calculated promotion price of a product
+	/// </summary>
 	public interface IPromotionService
 	{
 		/// <summary>

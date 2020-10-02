@@ -17,7 +17,7 @@ namespace PromoEngine.Tests
 			PopulateCartForSKUA(cart);
 
 			var promotions = GetPromotionForSKUA();
-			var singlePromoService = (IPromotionService)new SinglePromotionService();
+			var singlePromoService = (IPromotionService)new PromotionService();
 			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
 
 			//Act
@@ -37,7 +37,7 @@ namespace PromoEngine.Tests
 			PopulateCartForSKUA(cart);
 
 			var promotions = GetPromotionForSKUA();
-			var singlePromoService = (IPromotionService)new SinglePromotionService();
+			var singlePromoService = (IPromotionService)new PromotionService();
 			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
 			var cartProductA = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUA).FirstOrDefault();
 
@@ -61,7 +61,7 @@ namespace PromoEngine.Tests
 			PopulateCartForSKUB(cart);
 
 			var promotions = GetPromotionForSKUB();
-			var singlePromoService = (IPromotionService)new SinglePromotionService();
+			var singlePromoService = (IPromotionService)new PromotionService();
 			var singlePromo = promotions.Where(promo => promo.Type == PromotionType.Single).FirstOrDefault();
 			var cartProductB = cart.CartProducts.Where(cp => cp.Product.SKU == Constants.SKUB).FirstOrDefault();
 

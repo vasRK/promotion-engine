@@ -99,7 +99,7 @@ namespace PromotionEngine.Models
 				return _cartPrice;
 			}
 
-			//if no product is discounted the return actual price.
+			//if no product is discounted then return actual price.
 			var actualPrice = this.GetActualPrice();
 			this._cartPrice = actualPrice;
 			return actualPrice;
